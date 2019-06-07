@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Money Management</string>
+    <string name="title_dashboard">Statistiques</string>
+    <string name="title_home">Accueil</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_schedules">échéancier</string>
+    <string name="title_profil">Profil</string>
+    <string name="title_saves">Economie</string>
+</resources>
