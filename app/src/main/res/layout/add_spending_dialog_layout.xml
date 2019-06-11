@@ -36,7 +36,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/motif_depense_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -44,7 +44,7 @@
                 android:hint="Motif" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/montant_depense_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

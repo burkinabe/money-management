@@ -3,6 +3,7 @@ package com.burkinabe.moneymanagement;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.burkinabe.database.entities.Depense;
 import com.burkinabe.fragment.AddSpendingDialogFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -14,8 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements SpendingFragment.OnFragmentInteractionListener, AddSpendingDialogFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements SpendingFragment.OnFragmentInteractionListener, AddSpendingDialogFragment.AddSpendingDialogFragmentListener {
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -49,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements SpendingFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -64,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements SpendingFragment.
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onFinishAddingDepense(Depense depense) {
 
     }
 }

@@ -26,6 +26,7 @@ import com.burkinabe.database.entities.Depense;
 import com.burkinabe.database.entities.Depot;
 import com.burkinabe.database.entities.User;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -143,6 +144,17 @@ public class DatabaseHandler {
 
     public List<Depense> getAllDepenses() {
         return realm.where(Depense.class)
+                .findAll();
+    }
+
+
+    public List<Depense> getDepensesByMonths(Date date) {
+
+        Date d = new Date();
+        Calendar calendar = Calendar.getInstance();
+
+        return realm.where(Depense.class)
+                .between(RealmField.DATEDEPENSE.key(), new Date(), new Date())
                 .findAll();
     }
 

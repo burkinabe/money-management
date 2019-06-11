@@ -45,7 +45,7 @@ import java.util.Locale;
  * Use the {@link SpendingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpendingFragment extends Fragment implements AddSpendingDialogFragment.AddSpendingDialogFragmentListner {
+public class SpendingFragment extends Fragment implements AddSpendingDialogFragment.AddSpendingDialogFragmentListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -56,6 +56,8 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
     private String mParam2;
     private RecyclerView spendingRecyclerView;
     private List<Depense> depenses;
+    private TextView depotMensuelTextview;
+    private TextView totalDepenseTexitview;
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,13 +104,25 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
         depenses = new ArrayList<>();
         final DepenseAdapter depenseAdapter = new DepenseAdapter(depenses);
         spendingRecyclerView.setAdapter(depenseAdapter);
+
+        depotMensuelTextview = view.findViewById(R.id.depot_mensuel_textview);
+        totalDepenseTexitview = view.findViewById(R.id.total_depense_textview);
+
         FloatingActionButton floatingActionButton = view.findViewById(R.id.spending_fab);
-        DatabaseHandler databaseHandler = new DatabaseHandler(view.getContext());
+        final DatabaseHandler databaseHandler = new DatabaseHandler(view.getContext());
         depenses.addAll(databaseHandler.getAllDepenses());
+
+        double totalDepense = 0.0;
+        for (Depense depense : depenses) {
+            totalDepense += depense.getMontantDepense();
+        }
+
+        totalDepenseTexitview.setText(""+totalDepense);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog();
+                showInputNameDialog();
             }
         });
         return view;
@@ -141,21 +155,17 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
     }
 
     @Override
-    public void onSaveButtonClick(DialogFragment dialogFragment) {
-
-    }
-
-    @Override
-    public void onCancelButtonClick(DialogFragment dialogFragment) {
-
-    }
-
-    @Override
-    public void onFinishEditDialog(Depense depense) {
+    public void onFinishAddingDepense(Depense depense) {
         DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
         databaseHandler.addDepense(depense);
         depenses.add(depense);
+        double totalDepense = 0.0;
+        for (Depense d : depenses) {
+            totalDepense += d.getMontantDepense();
+        }
+        totalDepenseTexitview.setText(""+totalDepense);
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -173,12 +183,23 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
     }
 
 
-    private void showEditDialog() {
-        FragmentManager fm = getFragmentManager();
-        AddSpendingDialogFragment editNameDialogFragment = AddSpendingDialogFragment.newInstance("Edit Dialog", "Add");
-        // SETS the target fragment for use later when sending results
-        editNameDialogFragment.setTargetFragment(SpendingFragment.this, 300);
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+
+    private void showInputNameDialog() {
+        FragmentManager fragmentManager = getFragmentManager();
+        AddSpendingDialogFragment addSpendingDialogFragment = new AddSpendingDialogFragment();
+        addSpendingDialogFragment.setCancelable(false);
+        addSpendingDialogFragment.setTargetFragment(SpendingFragment.this, 300);
+//        addSpendingDialogFragment.setDialogTitle("Enter Name");
+        addSpendingDialogFragment.show(fragmentManager, "Input Dialog");
+        DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
+        depenses.clear();
+        depenses.addAll(databaseHandler.getAllDepenses());
+        double totalDepense = 0.0;
+        for (Depense depense : depenses) {
+            totalDepense += depense.getMontantDepense();
+        }
+
+        totalDepenseTexitview.setText(""+totalDepense);
     }
 
 

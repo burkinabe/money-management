@@ -21,6 +21,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:clickable="true"
+            android:background="@color/colorPrimary"
             android:src="@android:drawable/ic_menu_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -46,7 +47,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/depot_mensuel_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -98,7 +99,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/total_depense_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
