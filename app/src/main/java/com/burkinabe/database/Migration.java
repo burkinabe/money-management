@@ -103,6 +103,10 @@ class Migration implements RealmMigration {
             createInitialSchema(schema);
             oldVersion++;
         }
+        if (oldVersion == 1) {
+            createInitialSchema(schema);
+            oldVersion++;
+        }
 
 //        if (oldVersion == 1) {
 //            // Change HB1AC reading from int to double
@@ -193,12 +197,19 @@ class Migration implements RealmMigration {
         schema.create(RObject.DEPOT.key())
                 .addField(RealmField.ID.key(), Long.class, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField(RealmField.DATEDEPOT.key(), Date.class)
+                .addField(RealmField.YEARVALUE.key(), Long.class)
+                .addField(RealmField.MONTHVALUE.key(), Long.class)
                 .addField(RealmField.MONTANTINITIAL.key(), Double.class, FieldAttribute.REQUIRED)
                 .addField(RealmField.MONTANTRESTANT.key(), Double.class);
 
         schema.create(RObject.DEPENSE.key())
                 .addField(RealmField.ID.key(), Long.class, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                .addField(RealmField.MONTANTDEPENSE.key(), Date.class);
+                .addField(RealmField.MONTANTDEPENSE.key(), Double.class)
+                .addField(RealmField.DATEDEPENSE.key(), Date.class)
+                .addField(RealmField.YEARVALUE.key(), Long.class)
+                .addField(RealmField.MONTHVALUE.key(), Long.class)
+                .addField(RealmField.DAYVALUE.key(), Long.class)
+                .addField(RealmField.MOTIF.key(), String.class);
 
 
     }

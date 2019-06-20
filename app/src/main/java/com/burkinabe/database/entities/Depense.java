@@ -14,6 +14,12 @@ public class Depense extends RealmObject {
 
     private Date dateDepense;
 
+    private long yearValue;
+
+    private long monthValue;
+
+    private long dayValue;
+
     private double montantDepense;
 
     public long getId() {
@@ -30,6 +36,30 @@ public class Depense extends RealmObject {
 
     public void setDateDepense(Date dateDepense) {
         this.dateDepense = dateDepense;
+    }
+
+    public long getDayValue() {
+        return dayValue;
+    }
+
+    public void setDayValue(long dayValue) {
+        this.dayValue = dayValue;
+    }
+
+    public long getMonthValue() {
+        return monthValue;
+    }
+
+    public void setMonthValue(long monthValue) {
+        this.monthValue = monthValue;
+    }
+
+    public long getYearValue() {
+        return yearValue;
+    }
+
+    public void setYearValue(long yearValue) {
+        this.yearValue = yearValue;
     }
 
     public double getMontantDepense() {

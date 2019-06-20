@@ -7,4 +7,8 @@
     <string name="title_schedules">échéancier</string>
     <string name="title_profil">Profil</string>
     <string name="title_saves">Economie</string>
+    <string name="adding_spending_text">Ajout</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_deposit">Nouveau Depot</string>
+    <string name="save_button">Enregistrer</string>
 </resources>

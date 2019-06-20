@@ -49,6 +49,7 @@ public class DatabaseHandler {
     public Realm getNewRealmInstance() {
         if (mRealmConfig == null) {
             mRealmConfig = new RealmConfiguration.Builder()
+                    .name("moneymanag.realm")
                     .schemaVersion(0)
                     .migration(new Migration())
                     .build();
@@ -86,6 +87,14 @@ public class DatabaseHandler {
 
 
     public void addDepot(Depot depot) {
+        int size = getAllDeposit().size();
+        int nextId;
+        if( size == 0) {
+            nextId = 1;
+        } else {
+            nextId = size + 1;
+        }
+        depot.setId(nextId);
         realm.beginTransaction();
         realm.copyToRealm(depot);
         realm.commitTransaction();
@@ -103,12 +112,24 @@ public class DatabaseHandler {
                 .findFirst();
     }
 
+    public List<Depot> getAllDeposit() {
+        return realm.where(Depot.class)
+                .findAll();
+    }
+
     public void updateDepot(Depot depot) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(depot);
         realm.commitTransaction();
     }
 
+    public Depot getCurrentMonthDepot() {
+        return realm.where(Depot.class)
+                .equalTo(RealmField.YEARVALUE.key(), new Date().getYear())
+                .and()
+                .equalTo(RealmField.MONTHVALUE.key(), new Date().getMonth())
+                .findFirst();
+    }
 
     public void addDepense(Depense depense) {
         int size = getAllDepenses().size();

@@ -2,6 +2,7 @@ package com.burkinabe.moneymanagement;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
@@ -26,7 +27,9 @@ import android.widget.Toast;
 import com.burkinabe.adapter.DepenseAdapter;
 import com.burkinabe.database.DatabaseHandler;
 import com.burkinabe.database.entities.Depense;
+import com.burkinabe.database.entities.Depot;
 import com.burkinabe.fragment.AddSpendingDialogFragment;
+import com.burkinabe.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -108,8 +111,15 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
         depotMensuelTextview = view.findViewById(R.id.depot_mensuel_textview);
         totalDepenseTexitview = view.findViewById(R.id.total_depense_textview);
 
+
+
         FloatingActionButton floatingActionButton = view.findViewById(R.id.spending_fab);
         final DatabaseHandler databaseHandler = new DatabaseHandler(view.getContext());
+
+        if (databaseHandler.getCurrentMonthDepot() != null) {
+            depotMensuelTextview.append(""+databaseHandler.getCurrentMonthDepot().getMontantInitial());
+        }
+
         depenses.addAll(databaseHandler.getAllDepenses());
 
         double totalDepense = 0.0;
@@ -122,7 +132,11 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showInputNameDialog();
+                if (databaseHandler.getCurrentMonthDepot() != null) {
+                    showInputNameDialog();
+                } else {
+                    Utils.showAlertDialog(getContext(), "Information", "Vous n'avez pas éffectué de depôt");
+                }
             }
         });
         return view;
@@ -157,13 +171,35 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
     @Override
     public void onFinishAddingDepense(Depense depense) {
         DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
-        databaseHandler.addDepense(depense);
-        depenses.add(depense);
-        double totalDepense = 0.0;
-        for (Depense d : depenses) {
-            totalDepense += d.getMontantDepense();
+        if (databaseHandler.getCurrentMonthDepot() != null) {
+            if (databaseHandler.getCurrentMonthDepot().getMontantRestant() < depense.getMontantDepense()) {
+                Utils.showAlertDialog(getContext(), "Information", "Votre solde n'est pas suffisant pour effectuer ce retrait");
+            } else {
+                Date date = new Date();
+                depense.setDayValue(date.getDay());
+                depense.setMonthValue(date.getMonth());
+                depense.setYearValue(date.getYear());
+                depense.setYearValue(Long.parseLong(date.getYear() + ""));
+                databaseHandler.addDepense(depense);
+                Depot depot = databaseHandler.getCurrentMonthDepot();
+                Depot temp = new Depot();
+                temp.setId(depot.getId());
+                temp.setMontantInitial(depot.getMontantInitial());
+                temp.setMonthValue(depot.getMonthValue());
+                temp.setYearValue(depot.getYearValue());
+                temp.setDateDepot(depot.getDateDepot());
+                temp.setMontantRestant((depot.getMontantRestant() - depense.getMontantDepense()));
+                databaseHandler.updateDepot(temp);
+                depenses.add(depense);
+                double totalDepense = 0.0;
+                for (Depense d : depenses) {
+                    totalDepense += d.getMontantDepense();
+                }
+                totalDepenseTexitview.setText("" + totalDepense);
+            }
+        } else {
+            Toast.makeText(getContext(), "Aucune depense enregistrée", Toast.LENGTH_LONG).show();
         }
-        totalDepenseTexitview.setText(""+totalDepense);
     }
 
 
@@ -209,6 +245,10 @@ public class SpendingFragment extends Fragment implements AddSpendingDialogFragm
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         textView.setText(sdf.format(dateRendezVousCalendar.getTime()));
+    }
+
+    public void updateDepotInitialTextView(String s) {
+        depotMensuelTextview.setText(s);
     }
 
 }

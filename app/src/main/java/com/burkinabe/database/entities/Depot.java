@@ -12,6 +12,10 @@ public class Depot extends RealmObject {
 
     private Date dateDepot;
 
+    private long yearValue;
+
+    private long monthValue;
+
     private double montantInitial;
 
     private double montantRestant;
@@ -31,6 +35,22 @@ public class Depot extends RealmObject {
 
     public void setDateDepot(Date dateDepot) {
         this.dateDepot = dateDepot;
+    }
+
+    public long getMonthValue() {
+        return monthValue;
+    }
+
+    public void setMonthValue(long monthValue) {
+        this.monthValue = monthValue;
+    }
+
+    public long getYearValue() {
+        return yearValue;
+    }
+
+    public void setYearValue(long yearValue) {
+        this.yearValue = yearValue;
     }
 
     public double getMontantInitial() {
